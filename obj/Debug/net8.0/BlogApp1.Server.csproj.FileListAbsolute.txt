@@ -49,3 +49,16 @@ C:\Users\KEERTHI\source\repos\WiseWork\BlogApp1.Server\obj\Debug\net8.0\refint\B
 C:\Users\KEERTHI\source\repos\WiseWork\BlogApp1.Server\obj\Debug\net8.0\BlogApp1.Server.pdb
 C:\Users\KEERTHI\source\repos\WiseWork\BlogApp1.Server\obj\Debug\net8.0\BlogApp1.Server.genruntimeconfig.cache
 C:\Users\KEERTHI\source\repos\WiseWork\BlogApp1.Server\obj\Debug\net8.0\ref\BlogApp1.Server.dll
+C:\Users\KEERTHI\source\repos\WiseWork\BlogApp1.Server\obj\Debug\net8.0\BlogApp1.Server.sourcelink.json
+C:\Users\KEERTHI\source\repos\WiseWork\BlogApp1.Server\bin\Debug\net8.0\Google.Apis.dll
+C:\Users\KEERTHI\source\repos\WiseWork\BlogApp1.Server\bin\Debug\net8.0\Google.Apis.Auth.dll
+C:\Users\KEERTHI\source\repos\WiseWork\BlogApp1.Server\bin\Debug\net8.0\Google.Apis.Core.dll
+C:\Users\KEERTHI\source\repos\WiseWork\BlogApp1.Server\bin\Debug\net8.0\Google.GenAI.dll
+C:\Users\KEERTHI\source\repos\WiseWork\BlogApp1.Server\bin\Debug\net8.0\Google.Protobuf.dll
+C:\Users\KEERTHI\source\repos\WiseWork\BlogApp1.Server\bin\Debug\net8.0\Grpc.Core.Api.dll
+C:\Users\KEERTHI\source\repos\WiseWork\BlogApp1.Server\bin\Debug\net8.0\Grpc.Net.Client.dll
+C:\Users\KEERTHI\source\repos\WiseWork\BlogApp1.Server\bin\Debug\net8.0\Grpc.Net.Common.dll
+C:\Users\KEERTHI\source\repos\WiseWork\BlogApp1.Server\bin\Debug\net8.0\Qdrant.Client.dll
+C:\Users\KEERTHI\source\repos\WiseWork\BlogApp1.Server\bin\Debug\net8.0\System.CodeDom.dll
+C:\Users\KEERTHI\source\repos\WiseWork\BlogApp1.Server\bin\Debug\net8.0\System.Management.dll
+C:\Users\KEERTHI\source\repos\WiseWork\BlogApp1.Server\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Management.dll

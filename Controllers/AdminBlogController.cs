@@ -1,9 +1,9 @@
 ﻿using BlogApp1.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Supabase;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Supabase.Postgrest.Attributes;
+using Supabase.Postgrest.Models;
+using static Supabase.Postgrest.Constants;
 
 namespace BlogApp1.Server.Controllers
 {

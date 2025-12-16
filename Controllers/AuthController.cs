@@ -48,7 +48,8 @@ namespace BlogApp1.Server.Controllers
                         UserId = Guid.Parse(    response.User.Id),
                         FullName = model.Name,
                         Email = model.Email,
-                        Roles = model.Role?.ToArray()
+                        Roles = model.Role?.ToArray(),
+                        CreatedAt = DateTime.Now
 
                     };
                     var result = await _supabase.From<BlogUser>().Insert(Profile);

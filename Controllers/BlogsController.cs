@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Supabase;
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
+using System.Net.Http;
 using static Supabase.Postgrest.Constants;
 
 namespace BlogApp1.Server.Controllers
@@ -305,35 +306,40 @@ namespace BlogApp1.Server.Controllers
         public async Task<IActionResult> CreateNewBlog([FromBody] NewBlog newBlog)
         {
             if (newBlog == null)
-            {
                 return BadRequest("Invalid blog data");
-            }
 
-            var blogData = new BlogData
+            try
             {
-                Title = newBlog.Title,
-                Slug = newBlog.Slug,
-                Content = newBlog.Content,
-                CoverImageUrl = newBlog.Image,
-                AuthorName = newBlog.AuhtorName,
-                AuthorUid = newBlog.AuhtorUID,
-                Tags = newBlog.Tags ?? new List<string>(),
-                Domain = string.IsNullOrEmpty(newBlog.Domain) ? "General" : newBlog.Domain,
-                Status = string.IsNullOrEmpty(newBlog.Status) ? "draft" : newBlog.Status,
-                MetaDescription = newBlog.MetaDescription,
+                var blogData = new BlogData
+                {
+                    Title = newBlog.Title,
+                    Slug = newBlog.Slug,
+                    Content = newBlog.Content,
+                    CoverImageUrl = newBlog.Image,
+                    AuthorName = newBlog.AuhtorName,
+                    AuthorUid = newBlog.AuhtorUID,
+                    Tags = newBlog.Tags ?? new List<string>(),
+                    Domain = string.IsNullOrEmpty(newBlog.Domain) ? "General" : newBlog.Domain,
+                    Status = string.IsNullOrEmpty(newBlog.Status) ? "pending" : newBlog.Status, // ✅ fix here
+                    MetaDescription = newBlog.MetaDescription,
+                    ViewCount = 0,
+                    LikesCount = 0,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
+                    ReadingTime = CalculateReadingTime(newBlog.Content),
+                    PublishedAt = newBlog.Status == "approved" ? DateTime.UtcNow : null
+                };
 
-                // DB managed or defaults
-                ViewCount = 0,
-                LikesCount = 0,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
-                ReadingTime = CalculateReadingTime(newBlog.Content), // optional helper
-                PublishedAt = newBlog.Status == "published" ? DateTime.UtcNow : null
-            };
-            var response = await _supabase.From<BlogData>().Insert(blogData);
-
-            return Ok(new { message = "Blog received successfully", blog = newBlog });
+                var response = await _supabase.From<BlogData>().Insert(blogData);
+                return Ok(new { message = "Blog received successfully", blog = newBlog });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ [CreateNewBlog] Error: {ex.Message}");
+                return BadRequest(new { message = ex.Message });
+            }
         }
+
         [HttpPost("follow")]
         public async Task<IActionResult> FollowUserAsync([FromBody] FollowRequest request)
         {
@@ -379,7 +385,68 @@ namespace BlogApp1.Server.Controllers
                 return StatusCode(500, $"Server error: {ex.Message}");
             }
         }
+        [HttpPost("saveaiblog")]
+        public async Task<IActionResult> SaveAIBlog([FromBody] AIBlogDto aiBlog)
+        {
+            if (aiBlog == null || string.IsNullOrWhiteSpace(aiBlog.Title))
+                return BadRequest("Invalid AI blog data.");
 
+            try
+            {
+                
+
+                var newBlog = new BlogData
+                {
+                    Title = aiBlog.Title,
+                    Slug = aiBlog.Slug,
+                    Content = aiBlog.Content,
+                    MetaDescription = aiBlog.MetaDescription ?? "",
+                    Domain = aiBlog.Category ?? "General",
+                    Tags = aiBlog.Tags ?? new(),
+                    AuthorName = aiBlog.AuthorName ?? "Unknown Author",
+                    AuthorUid = aiBlog.AuthorUid ?? Guid.NewGuid().ToString(),
+                    CoverImageUrl = aiBlog.CoverImageUrl,
+                    Status = "pending",
+                    ReadingTime = ParseReadingTime(aiBlog.ReadingTime),
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
+                    ViewCount = 0,
+                    LikesCount = 0
+                };
+
+                var response = await _supabase.From<BlogData>().Insert(newBlog);
+
+                if (response.Models.Count > 0)
+                {
+                    return Ok(new
+                    {
+                        message = "✅ AI Blog saved successfully!",
+                        blogId = response.Models.First().Id,
+                        slug = aiBlog.Slug,
+                        title = newBlog.Title
+                    });
+                }
+
+                return StatusCode(500, new { error = "Failed to save the blog into Supabase." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    error = "An error occurred while saving the AI blog.",
+                    details = ex.Message
+                });
+            }
+        }
+
+        private static long? ParseReadingTime(string readingTime)
+        {
+            if (string.IsNullOrWhiteSpace(readingTime)) return null;
+            var parts = readingTime.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            if (long.TryParse(parts[0], out var minutes))
+                return minutes;
+            return null;
+        }
 
         public class FollowRequest
         {

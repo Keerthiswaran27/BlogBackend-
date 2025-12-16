@@ -54,6 +54,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Google.GenAI": {
+              "target": "Package",
+              "version": "[0.7.0, )"
+            },
+            "Qdrant.Client": {
+              "target": "Package",
+              "version": "[1.16.1, )"
+            },
             "Supabase": {
               "target": "Package",
               "version": "[1.1.1, )"
