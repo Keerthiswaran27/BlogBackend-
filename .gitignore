@@ -1,0 +1,16 @@
+## .NET build folders
+bin/
+obj/
+
+## Visual Studio
+.vs/
+
+## OS files
+.DS_Store
+Thumbs.db
+
+## Logs
+*.log
+
+## Secrets
+appsettings.Development.json
